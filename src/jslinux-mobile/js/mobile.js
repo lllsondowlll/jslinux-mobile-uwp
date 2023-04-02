@@ -5,7 +5,7 @@
    ---------------------------------------------------------------- */
 
     var activated = false;
-    var defaultPreset = { "topmargin": 3, "columns": 92, "rows": 30, "font": 1, "fontcolor": 4, "fontsize": 18, "bgcolor": 5, "spacing": 2, "ram": 1, "options": 0 };
+    var defaultPreset = { "topmargin": 3, "columns": 48, "rows": 20, "font": 1, "fontcolor": 4, "fontsize": 14, "bgcolor": 5, "spacing": 2, "ram": 1, "options": 0 };
     var cookiePreset = Cookies.getJSON("preset");
     var paramsPreset = {}; location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){paramsPreset[k]=v});
 
@@ -13,7 +13,7 @@
         "font": [ undefined, "Panic Sans", "Iosevka Term", "Iosevka Term Bold", "Source Code Pro", "Courier", "Courier-Bold", "Menlo", "Menlo-Bold" ],
         "fontcolor": [ undefined, "#B8B8B8", "#FCFCFC", "#00F000", "#708183", "#FEFFD3"],
         "bgcolor": [ undefined, "#141414", "#000", "#111C2A", "#272822", "#001E26" ],
-        "ram" : [ undefined, 16, 32, 64 ]
+        "ram" : [ undefined, 16, 32, 64, 128, 256, 512 ]
     };
 
     if (cookiePreset != null) { defaultPreset = cookiePreset;  }
@@ -92,14 +92,17 @@
                 <option value="1" ${fill["ram"][1]}>16</option>
                 <option value="2" ${fill["ram"][2]}>32</option>
                 <option value="3" ${fill["ram"][3]}>64</option>
+                <option value="4" ${fill["ram"][4]}>128</option>
+                <option value="5" ${fill["ram"][5]}>256</option>
+                <option value="6" ${fill["ram"][6]}>512</option>
             </select> Mb.
 
-            &copy; <a href="http://bellard.org">Fabrice Bellard</a> / Mobile version by <a href="http://jm.iq.pl/en">Jaromaz</a>. `;
+            &copy; <a href="http://bellard.org">Fabrice Bellard</a> / Mobile version by <a href="http://jm.iq.pl/en">Jaromaz</a> / UWP Port by <a href="https://github.com/empyreal96">Empyreal96</a>. `;
 
     var info = infoLong;
 
     if (defaultPreset["options"] == 1) {
-        info = `The user option was used. You can change the options by pressing the upper right corner of the screen. For full support for the VI editor you need a bluetooth keyboard (CTRL+h or CTRL+c will leave the VI edition mode), and after running Linux enter the command: <i><strong>stty -F /dev/ttyS0 rows ${defaultPreset["rows"]} cols ${defaultPreset["columns"]}</strong></i> . &copy; <a href="http://bellard.org">Fabrice Bellard</a> / Mobile version by <a href="https://jm.iq.pl/en">Jaromaz</a>. `;
+        info = `The user option was used. You can change the options by pressing the upper right corner of the screen. For full support for the VI editor you need a bluetooth keyboard (CTRL+h or CTRL+c will leave the VI edition mode), and after running Linux enter the command: <i><strong>stty -F /dev/ttyS0 rows ${defaultPreset["rows"]} cols ${defaultPreset["columns"]}</strong></i> . &copy; <a href="http://bellard.org">Fabrice Bellard</a> / Mobile version by <a href="https://jm.iq.pl/en">Jaromaz</a> / UWP Port by <a href="https://github.com/empyreal96">Empyreal96</a>. `;
     }
 
     $( document ).ready(function() {
