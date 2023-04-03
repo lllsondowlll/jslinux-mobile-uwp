@@ -50,7 +50,7 @@ PCEmulator.prototype.timer_func = function ()
     var exit_status, Ncycles, do_reset, err_on_exit, PC, cpu;
     PC = this;
     cpu = PC.cpu;
-    Ncycles = cpu.cycle_count + 100000;
+    Ncycles = cpu.cycle_count + 200000 * 150; // This can control cpu frequency, increase the amount of cycles to increase clock speed, currently has adverse effects
     do_reset = false;
     err_on_exit = false;
     exec_loop: while (cpu.cycle_count < Ncycles)
