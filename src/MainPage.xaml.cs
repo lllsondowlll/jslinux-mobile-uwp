@@ -1,10 +1,20 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,13 +32,25 @@ namespace JSLinuxUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        //CoreDispatcher dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
         public MainPage()
         {
             this.InitializeComponent();
-            MainWebFrame.Navigate(new Uri(@"ms-appx-web:///jslinux-mobile/index.html"));
-           
+            
 
+            MainWebFrame.Navigate(new Uri(@"ms-appx-web:///jslinux-tap/index.html"));
+
+            // StartWebSocket();
         }
+
+
+
+
+        private async void StartWebSocket()
+        {
+       
+        }
+
 
         private void MainWebFrame_FrameNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
@@ -62,7 +84,7 @@ namespace JSLinuxUWP
 
         private void MainWebFrame_ScriptNotify(object sender, NotifyEventArgs e)
         {
-
+            Debug.WriteLine(e.Value);
         }
     }
 }

@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,6 +31,14 @@ namespace JSLinuxUWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
+        }
+
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs ex)
+        {
+            var CustErr = new MessageDialog($"{ex.Exception.Message}\n\n{ex.Exception.StackTrace}\n\n{ex.Exception.Source}");
+            CustErr.Commands.Add(new UICommand("Close"));
+            CustErr.ShowAsync();
         }
 
         /// <summary>
