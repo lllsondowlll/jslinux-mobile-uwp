@@ -22,10 +22,18 @@ Theoretically, if indexeddb is used as the hard disk, the hard disk should be la
 
 Through websocket as the server, the Linux tap device in the browser communicates with the server. Here you need to change the configuration of the kernel compilation. The kernel config option must set TUN=yes
 <pre>
+  
 The network is divided into three parts:
-       (1) The internal network of jslinux is to establish a tap device and interact with the /dev/ttyS1 device. This is the part where jslinux interacts with the browser, similar to /dev/clipboard interacting with textare on the browser. The code to establish the tap device is [tap Code link](https://www.iteye.com/blog/haoningabc-2436305)
+  
+       (1) The internal network of jslinux establishes a tap device and interacts with the /dev/ttyS1 console. 
+           jslinux uses this process to interact with the browser
+           --similarly to how /dev/clipboard interacts with textarea on the browser.
+  
+           code to establish the tap device can be found [HERE](https://www.iteye.com/blog/haoningabc-2436305)
+  
        (2) The browser and server are connected using websocket
-       (3) The same principle applies to server-side Linux. A bridge is established. One end of the tap device is tied to the bridge and the other end is connected to the websocket.
+  
+       (3) The same principle applies to server-side Linux. A bridge is established, then one end of the tap device is tied to the                 bridge and the other end is connected to the websocket.
   </pre>
 
 
@@ -116,11 +124,17 @@ jslinux:tap0
                ---> vm:websockettunt0
 ```
 
+Example snippit:
 
-From jslinux: ping 10.0.2.1
+From jslinux
+```shell
+ping 10.0.2.1
+```
 
-From the server: tcpdump -i websockettunt0 View traffic
-
+From the server
+```web
+tcpdump -i websockettunt0 View traffic
+```
 
 **FAQ:**
 
@@ -134,7 +148,7 @@ Under jslinux-tap/websocketstuntap --use mod_pywebsocket
 
 **3. Interacting with the browser within jslinux**:
 
-Browser interaction can be acchieved through textarea --kernel driver support required.
+Browser interaction can be achieved via textarea --kernel driver support required.
 
 The code is in src/patch_linux-2.6.20 of [https://github.com/killinux/jslinux-kernel/](https://github.com/killinux/jslinux-kernel/), which defines the jsclipboard device. Corresponds to /dev/clipboard in jslinux
 If you want to transfer content from jslinux to the textarea of the browser, use the following:
@@ -160,7 +174,7 @@ Note that linuxstart.bin and vmlinux-2.6.20.bin need to be recompiled together. 
 
 **5. Virtual hard disk creation**:
 
-1. Merge the split virtual hard disk files into a single binary and mount it on the local system
+1. Merge the split virtual hard disk files into a single virtual disk binary and mount it on the local system
 ```shell
 cd jslinux-tap/hao
 cat hda000000*.bin > hda.bin
@@ -168,7 +182,7 @@ mount -t ext2 -o loop hda.bin /mnt/jshda
 cp -r /mnt/jshda jslinux
 ```
 
-2. Modify the files in the jslinux hard disk found within the following location:
+2. Modify the files from within the mounted jslinux hard disk located in the following directory:
 ```shell
 /mnt/jshda
 ```
