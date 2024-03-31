@@ -84,7 +84,7 @@ Achieve interoperability between multiple jslinux through bridge:
 
 
 /dev/ttyS1 corresponds to the COM port, serial number 0x2f8
-Reference: [Device number defined by Google](https://books.google.com.hk/books?id=u7ZVYFu50hkC&pg=PA719&lpg=PA719&dq=0x2f8%20/dev/ttyS1&source=bl&ots=IZRjCKGEGa&sig=ACfU3U0DNRadlUsVJejKNXo1m_5pYm8E3Q&hl=zh -CN&sa= X&redir_esc=y&sourceid=cndr#v=onepage&q=0x2f8&f=false)
+Reference: [Device number defined by Google](https://books.google.com.hk/books?id=u7ZVYFu50hkC&pg=PA719&lpg=PA719&dq=0x2f8%20/dev/ttyS1&source=bl&ots=IZRjCKGEGa&sig=ACfU3U0DNRadlUsVJejKNXo1m_5pYm8E3Q&hl=zh-CN&sa=X&redir_esc=y&sourceid=cndr#v=onepage&q=0x2f8&f=false)
 
 jslinux network driver:
 dmesg |grep ttyS*
