@@ -9,11 +9,17 @@ Unobfuscated jslinux reference: [https://github.com/levskaya/jslinux-deobfuscate
   There is no network, and the hard disk is not that big, but the code is readable.
  
  
-**What I changed**:
-1.**Added hard disk part**:
+**Fork changelog and additions**:
+
+**1. Added hard disk content**:
+   
 The hard disk is under hao. If you want to modify the hard disk content or generate rootfs, please refer to [Modify jslinux hard disk content](https://www.iteye.com/blog/haoningabc-2240076)
+
 Theoretically, if indexeddb is used as the hard disk, the hard disk should be larger, and browserfs is planned to be added in the future.
-2.**Added the network part**: Through websocket as the server, the Linux tap device in the browser communicates with the server. Here you need to change the configuration of the kernel compilation. The kernel config option must set TUN=yes
+
+**2. Added Networking**: 
+
+Through websocket as the server, the Linux tap device in the browser communicates with the server. Here you need to change the configuration of the kernel compilation. The kernel config option must set TUN=yes
 <pre>
 The network is divided into three parts:
        (1) The internal network of jslinux is to establish a tap device and interact with the /dev/ttyS1 device. This is the part where jslinux interacts with the browser, similar to /dev/clipboard interacting with textare on the browser. The code to establish the tap device is [tap Code link](https://www.iteye.com/blog/haoningabc-2436305)
@@ -21,8 +27,9 @@ The network is divided into three parts:
        (3) The same principle applies to server-side Linux. A bridge is established. One end of the tap device is tied to the bridge and the other end is connected to the websocket.
   </pre>
 
+**Usage Instructions**:
 
-**Run the code**:
+**Running the project code**:
 
 How to run:
 **1. Install dependencies**, mod_pywebsocket and bridge-utils:
@@ -38,7 +45,9 @@ brctl show
 Specific reference script: launch.sh
 Pay attention to setting forwarding of MASQUERADE and ip_forward=1, otherwise the network may be blocked.
 
-**2. Start the websocket service of websocketstuntap**: This service generates the association between tap devices and websockets, and hangs the tap devices on the br1 bridge. It is the basis for mutual communication between jslinux
+**2. Starting the websocketstuntap service**:
+
+This service generates the association between tap devices and websockets, and hangs the tap devices on the br1 bridge. It is the basis for mutual communication between jslinux
 ```shell
 brctl addbr br1
 brctl stp br1 on
@@ -46,15 +55,18 @@ ip link set br1 promisc on
 ip link set br1 up
 ifconfig br1 hw ether ee:ee:ee:ee:ee:50
 ```
-You need to specify the mac address, otherwise the mac address will become the latest every time you create a new tap, affecting network interaction.
+You need to specify the MAC address, otherwise the MAC address will become the latest every time you create a new tap, affecting network interaction.
 ```shell
 ifconfig br1 10.0.2.1 netmask 255.0.0.0 up
 ```
-**3. Modify websocket client**
+**3. Modifying the websocket client**
+
 The code is at: jslinux-tap/js/network-websockets.js
 Modify the WebSocket server in to the newly created websocket service
 
-**4. Start two chrome pages**, be careful not to be in the same tab
+**4. Launching seperate chrome tabs**
+
+Be careful not to be in the same tab
 Enter the command cat /dev/clipboard |sh in jslinux
 Here, the tap device is established inside jslinux and the websocket of network-websockets.js is called for interaction through serial2 of PCEmulator.js.
 Tap device creation in jslinux:
@@ -64,7 +76,8 @@ stty -F /dev/ttyS1 -ignbrk -brkint -parmrk -istrip -inlcr -igncr -icrnl -ixon -o
 ```
 
 
-**The main principle is**
+**The main principle**
+
 ```shell
 jslinux:/dev/ttyS1
    ----->
@@ -103,12 +116,18 @@ In the server: tcpdump -i websockettunt0 View traffic
 
 
 **FAQ:**
-**1. The problem of dual jslinux network failure**?
+
+**1. Dual network network limitations within jslinux**:
+
 Answer: Both jslinux-tap browsers must be in visible places and cannot be placed under tabs. If one is not written and displayed, it will not be loaded. The select in tap_wsh.py is not readable and writable.
-**2. Where is the server code**?
-Answer: Under jslinux-tap/websocketstuntap, use mod_pywebsocket
-**3. How to interact with the browser in jslinux**:
-Answer: Through textarea, this part requires kernel driver support.
+
+**2. Locating server code**:
+
+Answer: Under jslinux-tap/websocketstuntap --use mod_pywebsocket
+
+**3. Interacting with the browser within jslinux**:
+
+Answer: Through textarea --this portion requires kernel driver support.
 The code is in src/patch_linux-2.6.20 of [https://github.com/killinux/jslinux-kernel/](https://github.com/killinux/jslinux-kernel/), which defines the jsclipboard device. Corresponds to /dev/clipboard in jslinux
 If you want to transfer content from jslinux to the textarea of the browser, use
 ```shell
@@ -123,11 +142,14 @@ The network equipment in jslinux is established through this
 ```shell
 cat /dev/clipboard |sh
 ```
-**4. If I want to recompile the kernel, do this**:
+**4. Recompiling the kernel**:
+
 Answer: Please refer to [https://www.iteye.com/blog/haoningabc-2338061](https://www.iteye.com/blog/haoningabc-2338061)
 Currently, using the 2.6.20 kernel requires some patches. The patch code is in the code [https://github.com/killinux/jslinux-kernel](https://github.com/killinux/jslinux-kernel)
 Note that linuxstart.bin and vmlinux-2.6.20.bin need to be recompiled together. linuxstart defines the byte from which the kernel should be loaded.
-**5. What to do if you want to recreate the hard drive**:
+
+**5. Virtual hard disk creation**:
+
 answer:
 1. Merge scattered hard disk files into one and mount it on the local system
 ```shell
