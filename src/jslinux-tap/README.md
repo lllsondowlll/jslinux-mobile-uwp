@@ -9,7 +9,8 @@ Unobfuscated jslinux reference: [https://github.com/levskaya/jslinux-deobfuscate
   There is no network, and the hard disk is not that big, but the code is readable.
  
  
-**Fork changelog and additions**:
+**--Fork changelog and additions--**
+
 
 **1. Added hard disk content**:
    
@@ -27,7 +28,9 @@ The network is divided into three parts:
        (3) The same principle applies to server-side Linux. A bridge is established. One end of the tap device is tied to the bridge and the other end is connected to the websocket.
   </pre>
 
-**Usage Instructions**:
+
+**--Usage Instructions--**
+
 
 **Running the project code**:
 
@@ -55,10 +58,12 @@ ip link set br1 promisc on
 ip link set br1 up
 ifconfig br1 hw ether ee:ee:ee:ee:ee:50
 ```
+
 You need to specify the MAC address, otherwise the MAC address will become the latest every time you create a new tap, affecting network interaction.
 ```shell
 ifconfig br1 10.0.2.1 netmask 255.0.0.0 up
 ```
+
 **3. Modifying the websocket client**
 
 The code is at: jslinux-tap/js/network-websockets.js
@@ -76,7 +81,7 @@ stty -F /dev/ttyS1 -ignbrk -brkint -parmrk -istrip -inlcr -igncr -icrnl -ixon -o
 ```
 
 
-**The main principle**
+**--Example Snippet--**
 
 ```shell
 jslinux:/dev/ttyS1
@@ -111,63 +116,77 @@ jslinux:tap0
                ---> vm:websockettunt0
 ```
 
-In jslinux: ping 10.0.2.1
-In the server: tcpdump -i websockettunt0 View traffic
+
+From jslinux: ping 10.0.2.1
+
+From the server: tcpdump -i websockettunt0 View traffic
 
 
 **FAQ:**
 
 **1. Dual network network limitations within jslinux**:
 
-Answer: Both jslinux-tap browsers must be in visible places and cannot be placed under tabs. If one is not written and displayed, it will not be loaded. The select in tap_wsh.py is not readable and writable.
+Both jslinux-tap browsers must be in visible places and cannot be placed under tabs. If one is not written and displayed, it will not be loaded. The select in tap_wsh.py is not readable and writable.
 
 **2. Locating server code**:
 
-Answer: Under jslinux-tap/websocketstuntap --use mod_pywebsocket
+Under jslinux-tap/websocketstuntap --use mod_pywebsocket
 
 **3. Interacting with the browser within jslinux**:
 
-Answer: Through textarea --this portion requires kernel driver support.
+Browser interaction can be acchieved through textarea --kernel driver support required.
+
 The code is in src/patch_linux-2.6.20 of [https://github.com/killinux/jslinux-kernel/](https://github.com/killinux/jslinux-kernel/), which defines the jsclipboard device. Corresponds to /dev/clipboard in jslinux
-If you want to transfer content from jslinux to the textarea of the browser, use
+If you want to transfer content from jslinux to the textarea of the browser, use the following:
 ```shell
 echo "haha" >/dev/clipboard
 ```
-If you want to transfer it from the browser to jslinux,
-After modifying the content of the textarea,
+
+Transfering content from the browser to jslinux can be achieved after modifying the content of the textarea:
 ```shell
 cat /dev/clipboard
 ```
-The network equipment in jslinux is established through this
+
+The network stack in jslinux is established via the following:
 ```shell
 cat /dev/clipboard |sh
 ```
+
 **4. Recompiling the kernel**:
 
-Answer: Please refer to [https://www.iteye.com/blog/haoningabc-2338061](https://www.iteye.com/blog/haoningabc-2338061)
+Please refer to [https://www.iteye.com/blog/haoningabc-2338061](https://www.iteye.com/blog/haoningabc-2338061)
 Currently, using the 2.6.20 kernel requires some patches. The patch code is in the code [https://github.com/killinux/jslinux-kernel](https://github.com/killinux/jslinux-kernel)
 Note that linuxstart.bin and vmlinux-2.6.20.bin need to be recompiled together. linuxstart defines the byte from which the kernel should be loaded.
 
 **5. Virtual hard disk creation**:
 
-answer:
-1. Merge scattered hard disk files into one and mount it on the local system
+1. Merge the split virtual hard disk files into a single binary and mount it on the local system
 ```shell
 cd jslinux-tap/hao
 cat hda000000*.bin > hda.bin
 mount -t ext2 -o loop hda.bin /mnt/jshda
 cp -r /mnt/jshda jslinux
 ```
-2. Modify the files in the jslinux hard disk in /mnt/jshda
-3. Then split the modified hard disk into small pieces for jslinux to use
+
+2. Modify the files in the jslinux hard disk found within the following location:
+```shell
+/mnt/jshda
+```
+
+3. Next, re-split the modified virtual hard disk for jslinux to use
 ```shell
 split -a 9 -d -b 65536 hda.bin hda
 for f in hda000000*; do
      mv $f $f.bin
 done
 ```
-The purpose of splitting it into faster here is to speed up the speed of the browser reading the hard disk.
-The specific reading code is in jslinux-tap/jslinux.js
+The purpose of splitting the virtual hard disk is to improve memory and performance within the browser.
+
+Note: specific code for handling split virtual hard disks can be found within the following location: 
+```shell
+jslinux-tap/jslinux.js
+```
 ```javascript
 params.hda = { url: "hao/hda%d.bin", block_size: 64, nb_blocks: 912 };
 ```
+
