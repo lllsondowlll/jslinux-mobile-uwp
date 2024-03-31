@@ -1,6 +1,6 @@
 The test demo is at: [http://www.hackernel.com/jslinux/](http://www.hackernel.com/jslinux/)
 The code of this article is at: [https://github.com/killinux/jslinux-tap](https://github.com/killinux/jslinux-tap)
-![jslinux with network](https://img-blog.csdnimg.cn/20200624031118211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlYWZyZW5jaG xlYWY=,size_16,color_FFFFFF,t_70#pic_center)
+![jslinux with network](https://img-blog.csdnimg.cn/20200624031118211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlYWZyZW5jaGxlYWY=,size_16,color_FFFFFF,t_70#pic_center)
 
 jslinux, which was very popular in 2011, runs Linux on the browser. 10 years later, does anyone still remember this?
 
